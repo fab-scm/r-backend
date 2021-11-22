@@ -16,6 +16,7 @@ needs(Orcs)
 
 #Das Laden der Datei hat nur funktioniert, als alle Dateien der Beispieldaten vorhanden waren.
 sen_ms <- stack("./Files/Sen_Muenster.grd")
+sen_ms
 
 num = strtoi(input[[1]]) * 3
 
