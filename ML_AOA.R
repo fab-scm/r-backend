@@ -55,4 +55,3 @@ model <- ffs(trainDat[,predictors],
                trControl=ctrl,
                importance=TRUE,
                ntree=75)
-
