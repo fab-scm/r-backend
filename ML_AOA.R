@@ -1,6 +1,10 @@
+x <- function(data) {
+
+data = 2 * data
+
 rm(list=ls())
 #major required packages:
-needs(raster, lib.loc="./r-library")
+needs(raster)
 needs(caret)
 needs(mapview)
 needs(sf)
@@ -14,25 +18,20 @@ needs(doParallel)
 needs(parallel)
 needs(Orcs)
 
-sen_ms <- stack("Files/Sen_Muenster.grd")
+sen_ms <- stack("data/Sen_Muenster.grd")
 #print(sen_ms)
 
-# rgbplot_ms <- spplot(sen_ms[[1]],  col.regions="transparent",sp.layout =rgb2spLayout(sen_ms[[1:3]], quantiles = c(0.02, 0.98), alpha = 1))
+#plot(sen_ms)
 
-sen_mr <- stack("Files/Sen_Marburg.grd")
-# rgbplot_mr <- spplot(sen_mr[[1]],  col.regions="transparent",sp.layout =rgb2spLayout(sen_mr[[1:3]], quantiles = c(0.02, 0.98), alpha = 1))
-
-# plot(sen_ms)
-
-trainSites <- read_sf("Files/trainingsites_muenster.gpkg")
+trainSites <- read_sf("data/trainingsites_muenster.gpkg")
 #print(trainSites)
 
-#viewRGB(sen_ms, r = 3, g = 2, b = 1, map.types = "Esri.WorldImagery")
-  # mapview(trainSites)
+viewRGB(sen_ms, r = 3, g = 2, b = 1, map.types = "Esri.WorldImagery")+
+  mapview(trainSites)
 
-extr_pixel <- extract(sen_ms, trainSites, df=TRUE)
-extr <- merge(extr_pixel, trainSites, by.x="ID", by.y="PolygonID")
-# head(extr)
+extr <- extract(sen_ms, trainSites, df=TRUE)
+extr <- merge(extr, trainSites, by.x="ID", by.y="PolygonID")
+head(extr)
 
 set.seed(100)
 trainids <- createDataPartition(extr$ID,list=FALSE,p=0.05)
@@ -55,3 +54,7 @@ model <- ffs(trainDat[,predictors],
                trControl=ctrl,
                importance=TRUE,
                ntree=75)
+
+#print(model)
+return(model)
+}

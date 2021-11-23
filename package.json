@@ -2,6 +2,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "nodemon": "^2.0.15",
+    "r-integration": "^1.2.0",
     "r-script": "^0.0.4"
   },
   "name": "r-backend",
