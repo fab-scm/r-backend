@@ -3,8 +3,11 @@ var R = require("r-script");
 console.log("Test")
 
 // sync
-var out = R("ex-sync.R")
+var out = R("ML_AOA.R")
   .data(20)
-  .callSync();
+  .call(function(err, d) {
+    if (err) throw err;
+    return d;
+  });
 
-console.log(out);
+//console.log(out);
