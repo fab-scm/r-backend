@@ -1,6 +1,6 @@
 rm(list=ls())
 #major required packages:
-needs(raster)
+needs(raster, lib.loc="./r-library")
 needs(caret)
 needs(mapview)
 needs(sf)

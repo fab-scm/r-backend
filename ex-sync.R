@@ -2,6 +2,7 @@
 # https://stackoverflow.com/questions/55562652/calling-r-script-from-node-js-issue-loading-libraries
 
 #Loading packages
+library("needs", lib.loc="./r-library")
 needs(sp)
 needs(sf)
 needs(raster)
