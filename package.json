@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "express": "^4.17.1",
+    "git": "^0.1.5",
     "nodemon": "^2.0.15",
     "r-script": "^0.0.4"
   },
