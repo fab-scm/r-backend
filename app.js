@@ -1,6 +1,7 @@
 var express = require('express')
-var Rr = require("r-script");
+//var R = require("r-script");
 const R = require('r-integration');
+const fs = require('fs')
 var app = express();
 
 var server = app.listen(9090, function () {
@@ -10,19 +11,37 @@ var server = app.listen(9090, function () {
 
 app.get('/sync', (req, res, next) => {
     console.log("sync test")
-    var out = Rr("bla.R")
-        .data()
-        .callSync();
-    console.log(out);
+    let result = R.callMethod("bla.R", "x", {input: 2, upload: 4});
+    res.send(result);
+    console.log(result);
 })
 
 app.get('/async', (req, res, next) => {
     console.log("async test")
-    callMethodAsync("ML_AOA.R", "x", ["2"]).then((result) => {
+    callMethodAsync("ML_AOA.R", "train", [""]).then((result) => {
         console.log(result);
+        // callMethodAsync("ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
+        //     console.log(result);
+        //     res.send('calculation done')
+        // }).catch((error) => {
+        //     console.error(error);
+        //     res.send(error);
+        // })
         res.send(result);
     }).catch((error) => {
         console.error(error);
         res.send(error);
     })
 })
+
+
+app.get('/test', (req, res, next) => {
+    console.log("async test")
+    callMethodAsync("ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
+        console.log(result);
+        res.send(result);
+    }).catch((error) => {
+        console.error(error);
+        res.send(error);
+    })
+}) 
