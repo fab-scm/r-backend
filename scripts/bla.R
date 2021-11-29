@@ -4,3 +4,9 @@ x = function(input, upload) {
     #c = a + b
     return(result)
 }
+
+y <- function(data) {
+    #rm(list=ls())
+    data = 2 * data
+    return(data)
+}

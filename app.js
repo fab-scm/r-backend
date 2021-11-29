@@ -1,5 +1,4 @@
 var express = require('express')
-//var R = require("r-script");
 const R = require('r-integration');
 const fs = require('fs')
 var app = express();
@@ -18,33 +17,42 @@ app.get('/sync', (req, res, next) => {
 
 app.get('/async', (req, res, next) => {
     console.log("async test")
-    // callMethodAsync("ML_AOA.R", "train", [""]).then((result) => {
-    //     console.log(result);
-    //     // callMethodAsync("ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
-    //     //     console.log(result);
-    //     //     res.send('calculation done')
-    //     // }).catch((error) => {
-    //     //     console.error(error);
-    //     //     res.send(error);
-    //     // })
-    //     res.send(result);
-    // }).catch((error) => {
-    //     console.error(error);
-    //     res.send(error);
-    // })
 
-    let result = R.executeRScript("./scripts/test.R");
-    console.log(result);
+    const myPromise1 = new Promise((resolve, reject) => {
+        let result = R.executeRScript("./scripts/training.R");
+        if (result[0] == "1"){
+            resolve('successfull');
+        } else {
+            reject('failed');
+        } 
+    })
+
+    const myPromise2 = new Promise((resolve, reject) => {
+        let result = R.executeRScript("./scripts/classifyAndAOA.R");
+        if (result[0] == "1"){
+            resolve('successfull');
+        } else {
+            reject('failed');
+        } 
+    })
+
+    myPromise1.then((message) => {
+        console.log('Model training was ' + message);
+        myPromise2.then((message) => {
+            console.log('Classification and calculation of AOA was ' + message);
+        }).catch((message) => {
+            console.log('Classification and calculation of AOA ' + message);
+            res.send('Calculation completed')
+        })
+    }).catch((message) => {
+        console.log('Model training ' + message);
+    })
 })
 
 
 app.get('/test', (req, res, next) => {
-    console.log("async test")
-    callMethodAsync("./scripts/ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
-        console.log(result);
-        res.send(result);
-    }).catch((error) => {
-        console.error(error);
-        res.send(error);
-    })
+    console.log("testing...");
+    let result = R.executeRScript("./scripts/training.R");
+    console.log(result[0]);
+    res.send(result);
 }) 

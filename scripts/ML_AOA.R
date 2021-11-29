@@ -1,14 +1,3 @@
-x <- function(data) {
-    #rm(list=ls())
-    data = 2 * data
-    return(data)
-}
-
-test <- function(data) {
-    trainData <- readRDS(data)
-    return("works")
-}
-
 train <- function() {
 
     #data = 2 * data
