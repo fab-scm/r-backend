@@ -32,26 +32,6 @@
     #setwd("./")
 
     # #major required packages:
-    # # library("library", lib.loc="./r-library")
-    # # library(raster)
-    # # library(caret)
-    # # library(mapview)
-    # # library(sf)
-    # # #library(devtools)
-    # # #  install_github("HannaMeyer/CAST")
-    # # library(CAST)
-    
-    # library("sp", lib.loc="./r-library")
-    # library("raster", lib.loc="./r-library")
-    # library("withr", lib.loc="./r-library") 
-    # library("crayon", lib.loc="./r-library")
-    # library("ggplot2", lib.loc="./r-library")
-    # library("caret", lib.loc="./r-library")
-    # library("sf", lib.loc="./r-library")
-    # library("CAST", lib.loc="./r-library")      
-    # library("lattice", lib.loc="./r-library")
-    # library("randomForest", lib.loc="./r-library")
-
     library(sp)
     library(raster)
     library(withr)

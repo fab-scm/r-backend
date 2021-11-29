@@ -131,6 +131,10 @@ train <- function() {
 
 classifyAndAOA <- function(data) {
 
+<<<<<<< HEAD
+=======
+    library(needs)
+>>>>>>> 919f0918299f2b19e5eca713e7cb89a54afcc0b5
     library(sp)
     library(raster) 
     library(CAST) 
@@ -141,13 +145,24 @@ classifyAndAOA <- function(data) {
     library(Orcs)
 
     sen_ms <- stack("data/Sen_Muenster.grd")
+<<<<<<< HEAD
     model <- readRDS("./tempModel/model.RDS")
 
     prediction <- predict(sen_ms,model)
     writeRaster(prediction, "./stack/prediction.tif")
+=======
+    model <- readRDS("tempModel/model.RDS")
+
+    prediction <- predict(sen_ms,model)
+    writeRaster(prediction, "stack/prediction.tif", overwrite=TRUE)
+>>>>>>> 919f0918299f2b19e5eca713e7cb89a54afcc0b5
 
     cl <- makeCluster(4)
     registerDoParallel(cl)
     AOA <- aoa(sen_ms,model,cl=cl)
+<<<<<<< HEAD
     writeRaster(AOA, "./stack/aoa.tif")
+=======
+    writeRaster(AOA, "stack/aoa.tif", overwrite=TRUE)
+>>>>>>> 919f0918299f2b19e5eca713e7cb89a54afcc0b5
 }

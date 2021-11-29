@@ -33,8 +33,8 @@ app.get('/async', (req, res, next) => {
     //     res.send(error);
     // })
 
-    let result = R.executeRScript("./test.R");
-    console.log(result);
+    //let result = R.executeRScript("./test.R");
+    //console.log(result);
 })
 
 
