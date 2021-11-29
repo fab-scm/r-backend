@@ -11,7 +11,7 @@ var server = app.listen(9090, function () {
 
 app.get('/sync', (req, res, next) => {
     console.log("sync test")
-    let result = R.callMethod("bla.R", "x", {input: 2, upload: 4});
+    let result = R.callMethod("./scripts/bla.R", "x", {input: 2, upload: 4});
     res.send(result);
     console.log(result);
 })
@@ -33,14 +33,14 @@ app.get('/async', (req, res, next) => {
     //     res.send(error);
     // })
 
-    //let result = R.executeRScript("./test.R");
-    //console.log(result);
+    let result = R.executeRScript("./scripts/test.R");
+    console.log(result);
 })
 
 
 app.get('/test', (req, res, next) => {
     console.log("async test")
-    callMethodAsync("ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
+    callMethodAsync("./scripts/ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
         console.log(result);
         res.send(result);
     }).catch((error) => {
