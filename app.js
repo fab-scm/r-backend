@@ -18,20 +18,23 @@ app.get('/sync', (req, res, next) => {
 
 app.get('/async', (req, res, next) => {
     console.log("async test")
-    callMethodAsync("ML_AOA.R", "train", [""]).then((result) => {
-        console.log(result);
-        // callMethodAsync("ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
-        //     console.log(result);
-        //     res.send('calculation done')
-        // }).catch((error) => {
-        //     console.error(error);
-        //     res.send(error);
-        // })
-        res.send(result);
-    }).catch((error) => {
-        console.error(error);
-        res.send(error);
-    })
+    // callMethodAsync("ML_AOA.R", "train", [""]).then((result) => {
+    //     console.log(result);
+    //     // callMethodAsync("ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
+    //     //     console.log(result);
+    //     //     res.send('calculation done')
+    //     // }).catch((error) => {
+    //     //     console.error(error);
+    //     //     res.send(error);
+    //     // })
+    //     res.send(result);
+    // }).catch((error) => {
+    //     console.error(error);
+    //     res.send(error);
+    // })
+
+    let result = R.executeRScript("./test.R");
+    console.log(result);
 })
 
 
