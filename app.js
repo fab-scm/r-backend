@@ -39,10 +39,11 @@ app.get('/async', (req, res, next) => {
     myPromise1.then((message) => {
         console.log('Model training was ' + message);
         myPromise2.then((message) => {
-            console.log('Classification and calculation of AOA was ' + message);
+            res.send('Calculation ' + message)
+            console.log('Classification and calculation of AOA were ' + message);
         }).catch((message) => {
+            res.send('Calculation failed')
             console.log('Classification and calculation of AOA ' + message);
-            res.send('Calculation completed')
         })
     }).catch((message) => {
         console.log('Model training ' + message);
@@ -52,7 +53,7 @@ app.get('/async', (req, res, next) => {
 
 app.get('/test', (req, res, next) => {
     console.log("testing...");
-    let result = R.executeRScript("./scripts/training.R");
+    let result = R.executeRScript("./scripts/classifyAndAOA.R");
     console.log(result[0]);
-    res.send(result);
+    res.send('Calculation successfull');
 }) 
