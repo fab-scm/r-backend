@@ -29,7 +29,7 @@
 # -Trained model as .rds file
 
 rm(list=ls())
-#setwd("./")
+# setwd("~/Documents/Studium/5. Semester/Geosoftware II/r-backend")
 
 # #major required packages:
 library(raster)

@@ -15,6 +15,22 @@ app.get('/sync', (req, res, next) => {
     console.log(result);
 })
 
+app.get("/test", (req, res, next) => {
+    console.log("testing asyncronously...")
+
+    callMethodAsync("./scripts/ML_AOA.R", "train", {algorithm: "rf", trees: 75}).then((result) => {
+        console.log(result)
+        callMethodAsync("./scripts/ML_AOA.R", "classifyAndAOA", ["successfull"]).then((result) => {
+            console.log(result);
+            res.send(result)
+        }).catch((error) => {
+            console.error(error);
+        })
+    }).catch((error) => {
+        console.error(error);
+    })
+})
+
 app.get('/async', (req, res, next) => {
     console.log("async test")
 
@@ -51,9 +67,9 @@ app.get('/async', (req, res, next) => {
 })
 
 
-app.get('/test', (req, res, next) => {
-    console.log("testing...");
-    let result = R.executeRScript("./scripts/classifyAndAOA.R");
-    console.log(result[0]);
-    res.send('Calculation successfull');
-}) 
+// app.get('/test', (req, res, next) => {
+//     console.log("testing...");
+//     let result = R.executeRScript("./scripts/classifyAndAOA.R");
+//     console.log(result[0]);
+//     res.send('Calculation successfull');
+// }) 

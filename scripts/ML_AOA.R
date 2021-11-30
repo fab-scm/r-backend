@@ -1,4 +1,4 @@
-train <- function() {
+train <- function(algorithm, trees) {
 
     #data = 2 * data
 
@@ -35,38 +35,11 @@ train <- function() {
     rm(list=ls())
     #setwd("./")
 
-    # #major required packages:
-    # # library("library", lib.loc="./r-library")
-    # # library(raster)
-    # # library(caret)
-    # # library(mapview)
-    # # library(sf)
-    # # #library(devtools)
-    # # #  install_github("HannaMeyer/CAST")
-    # # library(CAST)
-    
-    # library("sp", lib.loc="./r-library")
-    # library("raster", lib.loc="./r-library")
-    # library("withr", lib.loc="./r-library") 
-    # library("crayon", lib.loc="./r-library")
-    # library("ggplot2", lib.loc="./r-library")
-    # library("caret", lib.loc="./r-library")
-    # library("sf", lib.loc="./r-library")
-    # library("CAST", lib.loc="./r-library")      
-    # library("lattice", lib.loc="./r-library")
-    # library("randomForest", lib.loc="./r-library")
-
-    library(sp)
     library(raster)
-    library(withr)
-    library(crayon)
-    library(ggplot2)
     library(caret)
-    library(sf)
     library(CAST)
     library(lattice)
-    library(randomForest)
-    
+    library(sf)
 
     # load raster stack from data directory
     sen_ms <- stack("data/Sen_Muenster.grd")
@@ -105,22 +78,21 @@ train <- function() {
 
     #Erstellen (Training) des Models
     set.seed(100)
-    model <- ffs(trainDat[,predictors],
+    model <- train(trainDat[,predictors],
                trainDat[,response],
-               method="rf",
+               method=algorithm,
                metric="Kappa",
                trControl=ctrl,
                importance=TRUE,
-               ntree=75)
+               ntree=trees)
     
     saveRDS(model, file="./tempModel/model.RDS")
 
-    #return(data);
+    print('Model training successfull')
 }
 
 classifyAndAOA <- function(data) {
 
-    library(needs)
     library(sp)
     library(raster) 
     library(CAST) 
@@ -140,4 +112,6 @@ classifyAndAOA <- function(data) {
     registerDoParallel(cl)
     AOA <- aoa(sen_ms,model,cl=cl)
     writeRaster(AOA, "stack/aoa.tif", overwrite=TRUE)
+
+    print('Classification and AOA calculation ' + data)
 }
