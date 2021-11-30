@@ -77,6 +77,13 @@ predictAreas <- function(data) {
     registerDoParallel(cl)
     AOA <- aoa(sen_ms,model,cl=cl)
 
+    improveArea <- spplot(AOA$AOA,col.regions=c("grey","transparent"))
+
+   # writeRaster(spplot(AOA$AOA,col.regions=c("grey","transparent")), ".testData/improve.tiff")
+
     print(AOA$AOA)
+    #print(improveArea)
+
+
 
 }
