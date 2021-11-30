@@ -1,4 +1,3 @@
-library(needs)
 library(raster)
 library(CAST) 
 library(tmap)
