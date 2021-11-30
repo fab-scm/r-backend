@@ -15,14 +15,14 @@ app.get('/sync', (req, res, next) => {
     console.log(result);
 })
 
-app.get("/test", (req, res, next) => {
+app.get("/egal", (req, res, next) => {
     console.log("testing asyncronously...")
 
-    callMethodAsync("./scripts/ML_AOA.R", "train", [""]).then((result) => {
-        console.log(result)
+    callMethodAsync("./scripts/ML_AOA.R", "training", [""]).then((result) => {
+        //console.log(result)
         callMethodAsync("./scripts/ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
-            console.log(result);
-            res.send(result)
+            console.log('ready');
+            res.send('ready')
         }).catch((error) => {
             console.error(error);
         })
