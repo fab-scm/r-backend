@@ -1,4 +1,6 @@
-training <- function() {
+training <- function(algorithm, trees) {
+
+  # print(algorithm)
   
   #data = 2 * data
   
@@ -32,8 +34,7 @@ training <- function() {
   #########
   # -Trained model as .rds file
   
-  rm(list=ls())
-  setwd("./")
+  #setwd("./")
   
   library(raster)
   library(caret)
@@ -80,16 +81,16 @@ training <- function() {
   set.seed(100)
   model <- train(trainDat[,predictors],
                  trainDat[,response],
-                 method="rf",
+                 method=algorithm,
                  metric="Kappa",
                  trControl=ctrl,
                  importance=TRUE,
-                 ntree=75)
+                 ntree=trees)
   
   saveRDS(model, file="./tempModel/model.RDS")
 }
 
-classifyAndAOA <- function() {
+classifyAndAOA <- function(data) {
   
   library(raster) 
   library(CAST) 
@@ -109,5 +110,7 @@ classifyAndAOA <- function() {
   registerDoParallel(cl)
   AOA <- aoa(sen_ms,model,cl=cl)
   writeRaster(AOA, "stack/aoa.tif", overwrite=TRUE)
+
+  data
 }
 

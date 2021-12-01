@@ -11,8 +11,8 @@ y <- function(data) {
     return(data)
 }
 
-z <- function() {
-    setwd("./")
-    getwd()
-    #print(wd)
+z <- function(algorithm, trees) {
+    a <- trees
+    b <- 20
+    a + b
 }
