@@ -1,13 +1,17 @@
-var express = require('express')
-const R = require('r-integration');
-const fs = require('fs')
-var app = express();
+// express
+const express = require('express')
+const app = express();
 
+// r-integration
+const R = require('r-integration');
+
+// initialize server on port 9090
 var server = app.listen(9090, function () {
     var port = server.address().port
     console.log(`App listening at http://localhost:${port}`)
 })
 
+// sync test route
 app.get('/sync', (req, res, next) => {
     console.log("sync test")
     let algorithm = "rf"
@@ -16,7 +20,8 @@ app.get('/sync', (req, res, next) => {
     console.log(result);
 })
 
-app.get("/egal", (req, res, next) => {
+// async prototype
+app.get("/async", (req, res, next) => {
     console.log("testing asyncronously...")
     let algorithm = '"rf"';
     let trees = 75;
@@ -33,40 +38,40 @@ app.get("/egal", (req, res, next) => {
     })
 })
 
-app.get('/async', (req, res, next) => {
-    console.log("async test")
+// app.get('/async', (req, res, next) => {
+//     console.log("async test")
 
-    const myPromise1 = new Promise((resolve, reject) => {
-        let result = R.executeRScript("./scripts/training.R");
-        if (result[0] == "1"){
-            resolve('successfull');
-        } else {
-            reject('failed');
-        } 
-    })
+//     const myPromise1 = new Promise((resolve, reject) => {
+//         let result = R.executeRScript("./scripts/training.R");
+//         if (result[0] == "1"){
+//             resolve('successfull');
+//         } else {
+//             reject('failed');
+//         } 
+//     })
 
-    const myPromise2 = new Promise((resolve, reject) => {
-        let result = R.executeRScript("./scripts/classifyAndAOA.R");
-        if (result[0] == "1"){
-            resolve('successfull');
-        } else {
-            reject('failed');
-        } 
-    })
+//     const myPromise2 = new Promise((resolve, reject) => {
+//         let result = R.executeRScript("./scripts/classifyAndAOA.R");
+//         if (result[0] == "1"){
+//             resolve('successfull');
+//         } else {
+//             reject('failed');
+//         } 
+//     })
 
-    myPromise1.then((message) => {
-        console.log('Model training was ' + message);
-        myPromise2.then((message) => {
-            res.send('Calculation ' + message)
-            console.log('Classification and calculation of AOA were ' + message);
-        }).catch((message) => {
-            res.send('Calculation failed')
-            console.log('Classification and calculation of AOA ' + message);
-        })
-    }).catch((message) => {
-        console.log('Model training ' + message);
-    })
-})
+//     myPromise1.then((message) => {
+//         console.log('Model training was ' + message);
+//         myPromise2.then((message) => {
+//             res.send('Calculation ' + message)
+//             console.log('Classification and calculation of AOA were ' + message);
+//         }).catch((message) => {
+//             res.send('Calculation failed')
+//             console.log('Classification and calculation of AOA ' + message);
+//         })
+//     }).catch((message) => {
+//         console.log('Model training ' + message);
+//     })
+// })
 
 
 // app.get('/test', (req, res, next) => {
