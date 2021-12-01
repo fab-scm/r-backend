@@ -11,14 +11,8 @@ var server = app.listen(9090, function () {
     console.log(`App listening at http://localhost:${port}`)
 })
 
-// sync test route
-app.get('/sync', (req, res, next) => {
-    console.log("sync test")
-    let algorithm = "rf"
-    let result = R.callMethod("./scripts/bla.R", "z", {algorithm: 'rf', trees: 75});
-    res.send(result);
-    console.log(result);
-})
+
+
 
 // async prototype
 app.get("/async", (req, res, next) => {
@@ -37,6 +31,17 @@ app.get("/async", (req, res, next) => {
         console.error(error);
     })
 })
+
+
+// sync test route
+app.get('/test', (req, res, next) => {
+    console.log("sync test")
+    let algorithm = "rf"
+    let result = R.callMethod("./scripts/test.R", "z", {algorithm: 'rf', trees: 75});
+    res.send(result);
+    console.log(result);
+})
+
 
 // app.get('/async', (req, res, next) => {
 //     console.log("async test")
@@ -72,11 +77,3 @@ app.get("/async", (req, res, next) => {
 //         console.log('Model training ' + message);
 //     })
 // })
-
-
-// app.get('/test', (req, res, next) => {
-//     console.log("testing...");
-//     let result = R.executeRScript("./scripts/classifyAndAOA.R");
-//     console.log(result[0]);
-//     res.send('Calculation successfull');
-// }) 

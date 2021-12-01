@@ -1,14 +1,8 @@
-training <- function(algorithm, trees) {
-
-  # print(algorithm)
+# R Script for estimation applicabillity tool
   
-  #data = 2 * data
-  
-  # R Script for estimation applicabillity tool
-  
-  ###################
-  # Training script #
-  ###################
+  #####################
+  # Training function #
+  #####################
   
   # Matching user story
   #####################
@@ -33,9 +27,11 @@ training <- function(algorithm, trees) {
   # Outputs
   #########
   # -Trained model as .rds file
-  
-  #setwd("./")
-  
+
+
+training <- function(algorithm, trees) {
+
+  # load packages
   library(raster)
   library(caret)
   library(CAST)
@@ -63,10 +59,6 @@ training <- function(algorithm, trees) {
   trainids <- createDataPartition(extr$ID,list=FALSE,p=0.05)
   trainDat <- extr[trainids,]
   
-  ###################
-  # Modell Training #
-  ###################
-  
   # Prädiktoren und Response festlegen
   predictors <- names(sen_ms)
   response <- "Label"
@@ -90,8 +82,49 @@ training <- function(algorithm, trees) {
   saveRDS(model, file="./tempModel/model.RDS")
 }
 
+
+
+
+
+
+
+
+  ###################################
+  # Classification and AOA function #
+  ###################################
+
+  # Matching user story
+  #####################
+  # As a user I want my AoI to be classified based on Sentinel 2 imagery. In addition I want to know how applicable the model is, which I
+  # used for my classification. Therefore I want the AOA to be calculated for my classification. If the model is not applicable I want to know
+  # where I need to collect additional training data. In the end it should be possible for me to download my classification, my AOA and
+  # recomended training locations.
+
+  # When is the script used/executed?
+  ################################### 
+  # In all cases of client usage.
+
+  # What does the script do?
+  ##########################
+  # Calculates the classification, the AOA for the given AoI (based on satellite imagery cropped and calculated in another script) and
+  # further recommended training locations.
+  # In the end all three parts are returned and stored to make them available as downloads.
+
+  # Inputs
+  ########
+  # -The trained model to use for calculations
+  # -Satellite imagery for AoI (provided by another script and stored on the server)
+
+  # Outputs
+  #########
+  # -Classification
+  # -AOA
+  # -Recommended training locations
+
+
 classifyAndAOA <- function(data) {
   
+  # load packages
   library(raster) 
   library(CAST) 
   library(tmap)
@@ -100,17 +133,29 @@ classifyAndAOA <- function(data) {
   library(parallel)
   library(Orcs)
   
+  # load raster stack from data directory
   sen_ms <- stack("data/Sen_Muenster.grd")
+
+  # load raster stack from data directory
   model <- readRDS("tempModel/model.RDS")
   
+  # prediction
   prediction <- predict(sen_ms,model)
+
+  # write prediction raster to tif in file directory
   writeRaster(prediction, "stack/prediction.tif", overwrite=TRUE)
   
+  # parallelization
   cl <- makeCluster(4)
   registerDoParallel(cl)
-  AOA <- aoa(sen_ms,model,cl=cl)
-  writeRaster(AOA, "stack/aoa.tif", overwrite=TRUE)
 
+  # calculate AOA
+  AOA <- aoa(sen_ms,model,cl=cl)
+
+  # write prediction raster to tif in file directory
+  writeRaster(AOA, "stack/aoa.tif", overwrite=TRUE)
+ 
+  # print variable
   data
 }
 
