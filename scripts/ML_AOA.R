@@ -33,7 +33,7 @@ training <- function() {
   # -Trained model as .rds file
   
   rm(list=ls())
-  #setwd("./")
+  setwd("./")
   
   library(raster)
   library(caret)

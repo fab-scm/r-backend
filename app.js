@@ -10,7 +10,7 @@ var server = app.listen(9090, function () {
 
 app.get('/sync', (req, res, next) => {
     console.log("sync test")
-    let result = R.callMethod("./scripts/bla.R", "x", {input: 2, upload: 4});
+    let result = R.callMethod("./scripts/bla.R", "z", [""]);
     res.send(result);
     console.log(result);
 })

@@ -10,3 +10,9 @@ y <- function(data) {
     data = 2 * data
     return(data)
 }
+
+z <- function() {
+    setwd("./")
+    getwd()
+    #print(wd)
+}
