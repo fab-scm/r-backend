@@ -126,6 +126,7 @@ classifyAndAOA <- function(data) {
   
   # load packages
   library(raster) 
+  library(leafletR)
   library(CAST) 
   library(tmap)
   library(latticeExtra)
@@ -157,5 +158,10 @@ classifyAndAOA <- function(data) {
  
   # print variable
   data
+  
+  x <- AOA$AOA@data@values
+  furtherTrainAreas <- rasterToPolygons(AOA$AOA, fun = function(x) {x == 0}, dissolve = TRUE)
+  
+  toGeoJSON(furtherTrainAreas, "furtherTrainAreas", dest = "./trainAreas", lat.lon, overwrite=TRUE)
 }
 
