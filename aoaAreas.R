@@ -15,6 +15,7 @@ predictAreas <- function(data) {
     library(doParallel)
     library(parallel)
     library(Orcs)
+    library(leafletR)
 
     #Load raster data 
     sen_ms <- stack("data/Sen_Muenster.grd")
@@ -46,16 +47,16 @@ predictAreas <- function(data) {
                         savePredictions = TRUE)
     
     # train the model
-    #set.seed(100)
-    #model <- ffs(trainDat[,predictors],
-    #            trainDat[,response],
-    #            method="rf",
-    #            metric="Kappa",
-    #            trControl=ctrl,
-    #            importance=TRUE,
-    #            ntree=75)
+    set.seed(100)
+    model <- train(trainDat[,predictors],
+                trainDat[,response],
+                method="rf",
+                metric="Kappa",
+                trControl=ctrl,
+                importance=TRUE,
+                ntree=75)
 
-    model <- readRDS("./tempModel/model.RDS")
+    #model <- readRDS("./tempModel/model.RDS")
     
     # get all cross-validated predictions:
     cvPredictions <- model$pred[model$pred$mtry==model$bestTune$mtry,]
@@ -77,14 +78,16 @@ predictAreas <- function(data) {
     registerDoParallel(cl)
     AOA <- aoa(sen_ms,model,cl=cl)
 
-    improveArea <- spplot(AOA$AOA,col.regions=c("grey","transparent"))
+    #Extract AOA values
+    x <- AOA$AOA@data@values
 
-   # writeRaster(spplot(AOA$AOA,col.regions=c("grey","transparent")), ".testData/improve.tiff")
+    #Convert data to polygon
+    trainingArea <- rasterToPolygons(AOA$AOA, fun = function(x){x==0}, dissolve = TRUE)
 
-    print(AOA$AOA)
+    #Save as geojson
+    toGeoJSON(trainingArea, "furtherTrainArea", dest = "./data")
+
+    print("success")
     
-    #print(improveArea)
-
-
 
 }
