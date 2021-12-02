@@ -73,21 +73,26 @@ predictAreas <- function(data) {
     tm_layout(legend.bg.color = "white",
                 legend.bg.alpha = 0.75)
 
+    #---------------------------------------------
+    #Ab hier Aufteilung für model training und aoa
+    #---------------------------------------------
+
+
     #Area of Applicability 
     cl <- makeCluster(4)
     registerDoParallel(cl)
     AOA <- aoa(sen_ms,model,cl=cl)
 
     #Extract AOA values
-    x <- AOA$AOA@data@values
+    values <- AOA$AOA@data@values
 
     #Convert data to polygon
-    trainingArea <- rasterToPolygons(AOA$AOA, fun = function(x){x==0}, dissolve = TRUE)
+    trainingArea <- rasterToPolygons(AOA$AOA, fun = function(values){values==0}, dissolve = TRUE)
 
     #Save as geojson
     toGeoJSON(trainingArea, "furtherTrainArea", dest = "./data")
 
-    print("Datei wurde in ./data abgespeichert")
+    return("Datei wurde in ./data abgespeichert")
     
 
 }
