@@ -82,6 +82,7 @@ predictAreas <- function(data) {
    # writeRaster(spplot(AOA$AOA,col.regions=c("grey","transparent")), ".testData/improve.tiff")
 
     print(AOA$AOA)
+    
     #print(improveArea)
 
 
