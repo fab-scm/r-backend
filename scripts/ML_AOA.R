@@ -133,7 +133,7 @@ classifyAndAOA <- function(data) {
   library(latticeExtra)
   library(doParallel)
   library(parallel)
-  # library(Orcs)
+  library(Orcs)
   
   # load raster stack from data directory
   sen_ms <- stack("data/Sen_Muenster.grd")
@@ -145,7 +145,7 @@ classifyAndAOA <- function(data) {
   prediction <- predict(sen_ms,model)
 
   # write prediction raster to tif in file directory
-  writeRaster(prediction, "stack/prediction.tif", overwrite=TRUE)
+  writeRaster(prediction, "stack/prediction.tif", overwrite = TRUE)
   
   # parallelization
   cl <- makeCluster(4)
@@ -160,9 +160,11 @@ classifyAndAOA <- function(data) {
   # print variable
   data
   
+  # Calculate a MultiPolygon from the AOA, which can be seen as the area where the user needs to find further training data
   x <- AOA$AOA@data@values
   furtherTrainAreas <- rasterToPolygons(AOA$AOA, fun = function(x) {x == 0}, dissolve = TRUE)
   
+  # Saves the calculated AOnA to a GeoJSON-file
   toGeoJSON(furtherTrainAreas, "furtherTrainAreas", dest = "./trainAreas", lat.lon, overwrite=TRUE)
 }
 
