@@ -87,7 +87,7 @@ predictAreas <- function(data) {
     #Save as geojson
     toGeoJSON(trainingArea, "furtherTrainArea", dest = "./data")
 
-    print("success")
+    print("Datei wurde in ./data abgespeichert")
     
 
 }
