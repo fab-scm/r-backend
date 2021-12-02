@@ -81,6 +81,7 @@ training <- function(algorithm, trees) {
                  ntree=trees)
   
   saveRDS(model, file="./tempModel/model.RDS")
+  
 }
 
 
@@ -166,5 +167,6 @@ classifyAndAOA <- function(data) {
   
   # Saves the calculated AOnA to a GeoJSON-file
   toGeoJSON(furtherTrainAreas, "furtherTrainAreas", dest = "./trainAreas", lat.lon, overwrite=TRUE)
+
 }
 
