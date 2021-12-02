@@ -37,6 +37,7 @@ training <- function(algorithm, trees) {
   library(CAST)
   library(lattice)
   library(sf)
+  library(Orcs)
   
   # load raster stack from data directory
   sen_ms <- stack("data/Sen_Muenster.grd")
@@ -132,7 +133,7 @@ classifyAndAOA <- function(data) {
   library(latticeExtra)
   library(doParallel)
   library(parallel)
-  library(Orcs)
+  # library(Orcs)
   
   # load raster stack from data directory
   sen_ms <- stack("data/Sen_Muenster.grd")
