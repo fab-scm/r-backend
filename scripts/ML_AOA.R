@@ -64,7 +64,7 @@ training <- function(algorithm, trees) {
   predictors <- names(sen_ms)
   response <- "Label"
   
-  # Drei Folds für die Cross-Validation im Modell Training definieren und traincontrol festlegen
+  # Drei Folds für die Spatial-Cross-Validation im Modell Training definieren und traincontrol festlegen
   indices <- CreateSpacetimeFolds(trainDat,spacevar = "ID",k=3,class="Label")
   ctrl <- trainControl(method="cv", 
                        index = indices$index,
