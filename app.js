@@ -60,7 +60,7 @@ app.get('/async', (req, res, next) => {
 
 app.get('/response', (req, res, next) => {
     console.log("response test")
-    callMethodAsync("aoaAreas.R", "predictAreas", ['rf']).then((result) => {
+    callMethodAsync("aoaAreas.R", "predictAreas", {algorithm: "rf", data: '[5]'}).then((result) => {
         console.log(result)
         res.send(result)
     }).catch((error) => {
@@ -70,7 +70,7 @@ app.get('/response', (req, res, next) => {
 })
 
 app.get('/a', (req, res, next) => {
-    callMethodAsync("aoaAreas.R", "test", ['xgbTree']).then((result) => {
+    callMethodAsync("aoaAreas.R", "test", {algorithm: "xgbTree", data: '[400, 6, 0.05, 0.01, 0.75, 0.50, 0]'}).then((result) => {
         console.log(result)
         res.send(result)
     }).catch((error) => {

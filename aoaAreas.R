@@ -1,4 +1,4 @@
-predictAreas <- function(data) {
+predictAreas <- function(algorithm, data) {
 
     #rm(list=ls())
     #major required packages:
@@ -16,6 +16,7 @@ predictAreas <- function(data) {
     library(parallel)
     library(Orcs)
     library(leafletR)
+    library(jsonlite)
 
     #Load raster data 
     sen_ms <- stack("data/Sen_Muenster.grd")
@@ -45,39 +46,43 @@ predictAreas <- function(data) {
     ctrl <- trainControl(method="cv", 
                         index = indices$index,
                         savePredictions = TRUE)
+
+    #create grid
+    #if(data[1] == 'rf')                    
     
-    # train the model
-    if(data == 'rf') {
-        set.seed(100)
-        model <- train(trainDat[,predictors],
+    #create grid
+    hyperparameter = fromJSON(data)
+    if(algorithm == 'rf') {
+        tune_grid <- expand.grid(mtry=c(hyperparameter[1]))
+    } else if (algorithm == 'xgbTree') {
+        tune_grid <- expand.grid(nrounds = c(hyperparameter[1]),
+                                            c(hyperparameter[2]), 
+                                            c(hyperparameter[3]), 
+                                            c(hyperparameter[4]), 
+                                            c(hyperparameter[5]), 
+                                            c(hyperparameter[6]), 
+                                            c(hyperparameter[7]))
+    } else {
+        print("Noch nicht implementiert")
+    }
+
+    #train model
+    set.seed(100)
+    model <- train(trainDat[,predictors],
                     trainDat[,response],
-                    method="rf",
-                    metric="Kappa",
-                    trControl=ctrl,
-                    importance=TRUE,
-                    ntree=75)
-    } else if (data == 'xgbTree') {
-        #create grid for tuning parameter of xgBoost
-        tune_grid <- expand.grid(nrounds=c(100, 200, 300, 400, 500), 
-                         max_depth = c(3:7), 
-                         eta = c(0.05, 0.5), #eta range
-                         gamma = c(0.01),
-                         colsample_bytree = c(0.75),
-                         subsample = c(0.50),
-                         min_child_weight = c(0))
-        #train model with extreme gradient boosting
-        set.seed(100)
-        model <- train(trainDat[,predictors],
-                    trainDat[,response],
-                    method="xgbTree",
-                    #method = "rf",
+                    method=algorithm,
                     metric="Kappa",
                     trControl=ctrl,
                     tuneGrid = tune_grid, 
                     tuneLength = 10)
-    } else {
-        return("Kein Algorithmus übergeben.")
-    }
+
+ #       tune_grid <- expand.grid(nrounds=c(100, 200, 300, 400, 500), 
+  #                       max_depth = c(3:7), 
+   #                      eta = c(0.05, 0.5), #eta range
+    #                     gamma = c(0.01),
+     #                    colsample_bytree = c(0.75),
+      #                   subsample = c(0.50),
+       #                  min_child_weight = c(0))
 
     #model <- readRDS("./tempModel/model.RDS")
     
@@ -120,8 +125,12 @@ predictAreas <- function(data) {
 
 }
 
-test <- function(data) {
-    if(data == 'rf') {
-        print("Test bestanden")
+test <- function(name, data) {
+    library(jsonlite)
+    test <- fromJSON(data)
+    if(name == 'rf') {
+        print(test[1])
+    } else {
+        print("test nicht bestanden")
     }
 }
