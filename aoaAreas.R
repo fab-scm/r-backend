@@ -1,6 +1,6 @@
 predictAreas <- function(data) {
 
-    rm(list=ls())
+    #rm(list=ls())
     #major required packages:
     library(raster)
     library(caret)
@@ -47,14 +47,37 @@ predictAreas <- function(data) {
                         savePredictions = TRUE)
     
     # train the model
-    set.seed(100)
-    model <- train(trainDat[,predictors],
-                trainDat[,response],
-                method="rf",
-                metric="Kappa",
-                trControl=ctrl,
-                importance=TRUE,
-                ntree=75)
+    if(data == 'rf') {
+        set.seed(100)
+        model <- train(trainDat[,predictors],
+                    trainDat[,response],
+                    method="rf",
+                    metric="Kappa",
+                    trControl=ctrl,
+                    importance=TRUE,
+                    ntree=75)
+    } else if (data == 'xgbTree') {
+        #create grid for tuning parameter of xgBoost
+        tune_grid <- expand.grid(nrounds=c(100, 200, 300, 400, 500), 
+                         max_depth = c(3:7), 
+                         eta = c(0.05, 0.5), #eta range
+                         gamma = c(0.01),
+                         colsample_bytree = c(0.75),
+                         subsample = c(0.50),
+                         min_child_weight = c(0))
+        #train model with extreme gradient boosting
+        set.seed(100)
+        model <- train(trainDat[,predictors],
+                    trainDat[,response],
+                    method="xgbTree",
+                    #method = "rf",
+                    metric="Kappa",
+                    trControl=ctrl,
+                    tuneGrid = tune_grid, 
+                    tuneLength = 10)
+    } else {
+        return("Kein Algorithmus übergeben.")
+    }
 
     #model <- readRDS("./tempModel/model.RDS")
     
@@ -92,7 +115,13 @@ predictAreas <- function(data) {
     #Save as geojson
     toGeoJSON(trainingArea, "furtherTrainArea", dest = "./data")
 
-    return("Datei wurde in ./data abgespeichert")
-    
+    return('Datei wurde in ./data abgespeichert')
+    #Datei wurde in ./data abgespeichert
 
+}
+
+test <- function(data) {
+    if(data == 'rf') {
+        print("Test bestanden")
+    }
 }

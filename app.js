@@ -9,7 +9,23 @@ var server = app.listen(9090, function () {
     console.log(`App listening at http://localhost:${port}`)
 })
 
+let parameters = {
+    "data": [
+        "rf",
+        "test", 
+        "1", 
+        "2", 
+        "3" 
+
+    ]
+}
+
+JSON.stringify(parameters)
+
+//test = JSON.parse(parameters)
+
 app.get('/', (req, res, next) => {
+    console.log(typeof(parameters.data[0]))
     res.send("Gehe weiter zu /response um das r-Script zu starten")
 })
 
@@ -23,20 +39,20 @@ app.get('/sync', (req, res, next) => {
 
 app.get('/async', (req, res, next) => {
     console.log("async test")
-    // callMethodAsync("ML_AOA.R", "train", [""]).then((result) => {
-    //     console.log(result);
-    //     // callMethodAsync("ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
-    //     //     console.log(result);
-    //     //     res.send('calculation done')
-    //     // }).catch((error) => {
-    //     //     console.error(error);
-    //     //     res.send(error);
-    //     // })
-    //     res.send(result);
-    // }).catch((error) => {
-    //     console.error(error);
-    //     res.send(error);
-    // })
+     callMethodAsync("ML_AOA.R", "train", [""]).then((result) => {
+        console.log(result);
+        callMethodAsync("ML_AOA.R", "classifyAndAOA", [""]).then((result) => {
+            console.log(result);
+            res.send('calculation done')
+        }).catch((error) => {
+            console.error(error);
+            res.send(error);
+        })  
+        res.send(result);
+     }).catch((error) => {
+    console.error(error);
+    res.send(error);
+})
 
     let result = R.executeRScript("./test.R");
     console.log(result);
@@ -44,7 +60,7 @@ app.get('/async', (req, res, next) => {
 
 app.get('/response', (req, res, next) => {
     console.log("response test")
-    callMethodAsync("aoaAreas.R", "predictAreas", [""]).then((result) => {
+    callMethodAsync("aoaAreas.R", "predictAreas", ['rf']).then((result) => {
         console.log(result)
         res.send(result)
     }).catch((error) => {
@@ -52,3 +68,14 @@ app.get('/response', (req, res, next) => {
         res.send(error)
     })
 })
+
+app.get('/a', (req, res, next) => {
+    callMethodAsync("aoaAreas.R", "test", ['xgbTree']).then((result) => {
+        console.log(result)
+        res.send(result)
+    }).catch((error) => {
+        console.log(error)
+        res.send(error)
+    })
+})
+
