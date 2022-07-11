@@ -12,7 +12,7 @@ y <- function(data) {
 }
 
 z <- function(algorithm, trees) {
-    a <- trees
-    b <- 20
+    a <- trees[1]
+    b <- trees[2]
     a + b
 }
